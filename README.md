@@ -7,11 +7,17 @@ These scripts reproduce the main results of the paper:
 Publication status: under review
 
 (1) Institute for Environmental Decisions, ETH Zurich, Switzerland
+
 (2) Federal Office of Meteorology and Climatology MeteoSwiss, Switzerland
+
 (3) Lamont-Doherty Earth Observatory, Columbia University, Palisades, NY, USA
+
 (4) Department of Applied Physics and Applied Mathematics, Columbia University, New York, NY, USA
+
 (5) Institute for Environmental Studies (IVM), Vrije Universiteit Amsterdam, Amsterdam, The Netherlands
+
 (6) Royal Netherlands Meteorological Institute, De Bilt, The Netherlands
+
 (7) Lorenz Center, Massachusetts Institute of Technology, Cambridge, Massachusetts, USA
 
 Contact: [Simona Meiler](simona.meiler@usys.ethz.ch)
