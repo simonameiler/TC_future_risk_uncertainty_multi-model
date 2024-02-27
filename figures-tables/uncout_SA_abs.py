@@ -2,7 +2,8 @@
 Adapted for code repository on 2024-02-26
 
 description: Supplementary Figure 4 & 5 - plotting of sensitivity indices - absolute values
-             line 83: change salib='S1' (first-order) to 'ST' for total-order sensitivity index
+             Supplementary Table 3 - largest sensitivity indices - absolute values
+             line 84: change salib='S1' (first-order) to 'ST' for total-order sensitivity index
 
 @author: simonameiler
 """
@@ -80,7 +81,6 @@ df = pd.DataFrame(data_list, columns=['region', 'year', 'model', 'si_EAD', 'si_r
 df.to_excel(res_dir.joinpath('largest_si_abs.xlsx'), index=False)
 
 #%%
-
 salib = 'ST'
 model = ['MIT', 'CHAZ', 'STORM', 'IBTrACS']
 lst = ['mn_exp', 'ssp_exp', 'gdp_model', 'HE_fut', 'tcgi_var', 'ssp_haz', 'gc_model', 'wind_model', 'v_half']

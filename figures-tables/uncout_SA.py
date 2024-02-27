@@ -3,7 +3,8 @@ Adapted for code repository on 2024-02-26
 
 description: Figure 3 - plotting of sensitivity indices first-order
              Supplementary Figure 3 - plotting of sensitivity indices total-order
-             line 84: change salib='S1' (first-order) to 'ST' for total-order sensitivity index
+             Supplementary Table 2 - largest sensitivity indices
+             line 85: change salib='S1' (first-order) to 'ST' for total-order sensitivity index
 
 @author: simonameiler
 """
