@@ -30,8 +30,19 @@ df = pd.read_excel(res_dir.joinpath("CHAZ_freq.xlsx"))
 # Sort models by TCR values
 sorted_models = sorted(TCR_CHAZ.keys(), key=lambda x: TCR_CHAZ[x])
 prefixes = ['AP', 'IO', 'SH', 'WP']
+
+plt.rcParams.update({
+    'font.size': 8,            # Default font size
+    'axes.titlesize': 9,       # Font size for figure part labels (A, B, C, etc.)
+    'axes.labelsize': 8,       # Font size for axis labels
+    'xtick.labelsize': 6,      # Font size for x-tick labels
+    'ytick.labelsize': 6,      # Font size for y-tick labels
+    'legend.fontsize': 7.5,    # Font size for legend
+    'lines.linewidth': 0.75,   # Line weight
+})
+
 # Create subplots: 4 rows, 2 columns
-fig, axes = plt.subplots(len(prefixes), 2, figsize=(8, len(prefixes) * 2.5), sharex='col', sharey='row')
+fig, axes = plt.subplots(len(prefixes), 2, figsize=(7.25, len(prefixes) * 2.5), sharex='col', sharey='row')
 
 # Loop through each prefix and plot the corresponding columns
 for i, prefix in enumerate(prefixes):
@@ -66,11 +77,11 @@ for i, prefix in enumerate(prefixes):
     axes[i, 0].get_legend().remove()
     axes[i, 1].get_legend().remove()
     # Adding subfigure labels
-    labels = ['a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h)']
-    axes[i,0].text(-0.35, 0.5, prefix, transform=axes[i,0].transAxes,
-                        fontsize=12)
+    labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    axes[i,0].text(-0.3, 0.5, prefix, transform=axes[i,0].transAxes,
+                        fontsize=9)
     for j, ax in enumerate(axes.ravel()):
-        ax.text(-0.05, 1.05, labels[j], transform=ax.transAxes, fontsize=12)
+        ax.text(-0.05, 1.05, labels[j], transform=ax.transAxes, fontsize=9, fontweight='bold')
 
     sns.despine()
 
@@ -79,23 +90,23 @@ handles2 = Line2D([0], [0], marker='*', color='k', label='TCR', linestyle = 'Non
                           markerfacecolor='k')
 handles.append(handles2)
 #axes[1,1].legend(handles=handles, labels=['CRH', 'SD', 'TCR'], bbox_to_anchor=(1.9, -0.1), handletextpad=0.2)
-fig.legend(handles=handles, labels=['CRH', 'SD', 'TCR'], loc='center right', bbox_to_anchor=(1.1, 0.55))
+fig.legend(handles=handles, labels=['CRH', 'SD', 'TCR'], loc='center right', bbox_to_anchor=(1.05, 0.5), fontsize=6.5)
 
 # Adjusting the layout
-plt.tight_layout()
+#plt.tight_layout()
 
-# save_fig_str = "CHAZ_frequency.png"
-# plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w',
-#             edgecolor='w', orientation='portrait', 
-#             format='png', bbox_inches='tight', pad_inches=0.1)
+save_fig_str = "CHAZ_frequency.png"
+plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w',
+            edgecolor='w', orientation='portrait', 
+            format='png', bbox_inches='tight', pad_inches=0.1)
 
-#%% repeath the story for intensity changes
+#%% repeat the story for intensity changes
 df = pd.read_excel(res_dir.joinpath("CHAZ_int.xlsx"))
 # Sort models by TCR values
 sorted_models = sorted(TCR_CHAZ.keys(), key=lambda x: TCR_CHAZ[x])
 prefixes = ['AP', 'IO', 'SH', 'WP']
 # Create subplots: 4 rows, 2 columns
-fig, axes = plt.subplots(len(prefixes), 2, figsize=(8, len(prefixes) * 2.5), sharex='col', sharey='row')
+fig, axes = plt.subplots(len(prefixes), 2, figsize=(7.25, len(prefixes) * 2.5), sharex='col', sharey='row')
 
 # Loop through each prefix and plot the corresponding columns
 for i, prefix in enumerate(prefixes):
@@ -130,11 +141,11 @@ for i, prefix in enumerate(prefixes):
     axes[i, 0].get_legend().remove()
     axes[i, 1].get_legend().remove()
     # Adding subfigure labels
-    labels = ['a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h)']
-    axes[i,0].text(-0.35, 0.5, prefix, transform=axes[i,0].transAxes,
-                        fontsize=12)
+    labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    axes[i,0].text(-0.3, 0.5, prefix, transform=axes[i,0].transAxes,
+                        fontsize=9)
     for j, ax in enumerate(axes.ravel()):
-        ax.text(-0.05, 1.05, labels[j], transform=ax.transAxes, fontsize=12)
+        ax.text(-0.05, 1.05, labels[j], transform=ax.transAxes, fontsize=9, fontweight='bold')
 
     sns.despine()
 
@@ -143,12 +154,12 @@ handles2 = Line2D([0], [0], marker='*', color='k', label='TCR', linestyle = 'Non
                           markerfacecolor='k')
 handles.append(handles2)
 #axes[1,1].legend(handles=handles, labels=['CRH', 'SD', 'TCR'], bbox_to_anchor=(1.9, -0.1), handletextpad=0.2)
-fig.legend(handles=handles, labels=['CRH', 'SD', 'TCR'], loc='center right', bbox_to_anchor=(1.1, 0.55))
+fig.legend(handles=handles, labels=['CRH', 'SD', 'TCR'], loc='center right', bbox_to_anchor=(1.05, 0.5), fontsize=6.5)
 
 # Adjusting the layout
-plt.tight_layout()
+#plt.tight_layout()
 
-# save_fig_str = "CHAZ_intensity.png"
-# plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w',
-#             edgecolor='w', orientation='portrait', 
-#             format='png', bbox_inches='tight', pad_inches=0.1)
+save_fig_str = "CHAZ_intensity.png"
+plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w',
+            edgecolor='w', orientation='portrait', 
+            format='png', bbox_inches='tight', pad_inches=0.1)

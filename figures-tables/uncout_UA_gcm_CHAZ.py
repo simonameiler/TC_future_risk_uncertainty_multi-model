@@ -67,16 +67,26 @@ for reg in region:
             str(reg)+'_'+str(per)].freq_curve_unc_df.rp100[ssp_idx]
 
 #%%
-metric = "EAD"
+plt.rcParams.update({
+    'font.size': 8,            # Default font size
+    'axes.titlesize': 9,       # Font size for figure part labels (A, B, C, etc.)
+    'axes.labelsize': 8,       # Font size for axis labels
+    'xtick.labelsize': 6,      # Font size for x-tick labels
+    'ytick.labelsize': 6,      # Font size for y-tick labels
+    'legend.fontsize': 7.5,    # Font size for legend
+    'lines.linewidth': 0.28,   # Line weight
+})
 
-labels_dict = {(0,0): 'a)',
-               (0,1): 'b)',
-               (1,0): 'c)',
-               (1,1): 'd)',
-               (2,0): 'e)',
-               (2,1): 'f)',
-               (3,0): 'g)',
-               (3,1): 'h)'}
+metric = "rp100"
+
+labels_dict = {(0,0): 'A',
+               (0,1): 'B',
+               (1,0): 'C',
+               (1,1): 'D',
+               (2,0): 'E',
+               (2,1): 'F',
+               (3,0): 'G',
+               (3,1): 'H'}
 
 TCR_CHAZ = {1.0: 2.0,
             2.0: 2.22,
@@ -97,7 +107,7 @@ TCR_list.sort()
 plt_points = np.arange(0,6)
 
 # okay, now make this pretty
-fig, ax = plt.subplots(nrows=4, ncols=2, figsize=(12,12), sharex=True, sharey=False)
+fig, ax = plt.subplots(nrows=4, ncols=2, figsize=(7.25,7.25), sharex=True, sharey=False)
 plt.subplots_adjust(left=0.1,
                     bottom=0.1,
                     right=0.9,
@@ -115,9 +125,9 @@ for r, reg in enumerate(region):
             ax=ax[r,p])
 
         ax[r,0].text(-0.25, 0.5, reg, transform=ax[r,0].transAxes,
-                        fontsize=12, rotation=0)
+                        fontsize=9, rotation=0)
         ax[r,p].text(-0.1, 1.05, labels_dict[r,p], transform=ax[r,p].transAxes,
-                     fontsize=12)
+                     fontsize=9, fontweight='bold')
         ax[0,0].set_title('2050')
         ax[0,1].set_title('2090')
         ax[r,p].get_legend().remove()
@@ -126,18 +136,18 @@ for r, reg in enumerate(region):
         ax[r,p].set_xticklabels(models_srtd, rotation=90)
         
         secax_y = ax[r,p].twinx()
-        secax_y.plot(plt_points, TCR_list, marker='*', color='k', markersize=12, ls='')
+        secax_y.plot(plt_points, TCR_list, marker='*', color='k', markersize=8, ls='')
         secax_y.set_ylabel('TCR')
         sns.despine()
 handles, labels = ax[1,1].get_legend_handles_labels()
 handles2 = Line2D([0], [0], marker='*', color='k', label='TCR', linestyle = 'None',
-                          markerfacecolor='k', markersize=12)
+                          markerfacecolor='k', markersize=9)
 handles.append(handles2)
-ax[1,1].legend(handles=handles, labels=['CRH', 'SD', 'TCR'], loc="upper left", bbox_to_anchor=(1.1, 0.25), handletextpad=0)
+ax[1,1].legend(handles=handles, labels=['CRH', 'SD', 'TCR'], loc="upper left", bbox_to_anchor=(1.15, 0.25), handletextpad=0, fontsize=6.5)
 
-# save_fig_str = f"UA_TC_risk_CHAZ_{metric}.png"
-# plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w',
-#             edgecolor='w', orientation='portrait', 
-#             format='png', bbox_inches='tight', pad_inches=0.1)
+save_fig_str = f"UA_TC_risk_CHAZ_{metric}.png"
+plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w',
+            edgecolor='w', orientation='portrait', 
+            format='png', bbox_inches='tight', pad_inches=0.1)
 
 

@@ -12,6 +12,7 @@ import numpy as np
 import logging
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.legend_handler import HandlerBase
 
 #Load Climada modules
 from climada.engine.unsequa import UncOutput
@@ -111,21 +112,28 @@ for per in periods:
         sens1_df_dict[mdl] = mdl_dict
     
     sens1_df_dicts[per] = sens1_df_dict
-    
+
 #%%
-y = np.arange(len(lst))
-colPalette_m = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']
+plt.rcParams.update({
+    'font.size': 8,            # Default font size
+    'axes.titlesize': 9,       # Font size for figure part labels (A, B, C, etc.)
+    'axes.labelsize': 8,       # Font size for axis labels
+    'xtick.labelsize': 6,      # Font size for x-tick labels
+    'ytick.labelsize': 6,      # Font size for y-tick labels
+    'legend.fontsize': 7.5,    # Font size for legend
+    'lines.linewidth': 0.28,   # Line weight
+})
 
-from matplotlib.legend_handler import HandlerBase
-
+# Define the SingleColorHandler class for custom legend entries
 class SingleColorHandler(HandlerBase):
-    def __init__(self, color, **kwargs):
+    def __init__(self, color, hatch=None, **kwargs):
         super().__init__(**kwargs)
         self.color = color
+        self.hatch = hatch
 
     def create_artists(self, legend, orig_handle, x0, y0, width, height, fontsize, trans):
         patch = plt.Rectangle([x0, y0], width, height, facecolor=self.color,
-                              edgecolor='k', transform=trans)
+                              edgecolor='k', hatch=self.hatch, transform=trans)
         return [patch]
 
 small_shift = 0.15
@@ -148,8 +156,14 @@ sens_names = [
 
 models = ['MIT', 'CHAZ', 'STORM', 'IBTrACS_p']
 
-# plot
-fig, axes = plt.subplots(figsize=(14, 7), nrows=2, ncols=4, sharey=True, sharex=True)
+# Define the hatch pattern for the specified color
+hatch_patterns = {'#33a02c': '///'}
+
+# Your existing color palette
+colPalette_m = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']
+
+# Plot configuration
+fig, axes = plt.subplots(figsize=(7.25, 3.6), nrows=2, ncols=4, sharey=True, sharex=True)
 fig.subplots_adjust(bottom=0.20, hspace=0.35, wspace=0.15)
 
 # Specify the models per row, skipping the model for axes[1,2]
@@ -171,39 +185,43 @@ for idx, per in enumerate(periods):
             sens_dict[reg][sens_dict[reg] < 0] = 0
             val_tot = 0
             for i, val in enumerate(sens_dict[reg][output_btt[0]]):
-                ax.barh(r-small_shift, width=val, height=bar_height, left=val_tot, color=colPalette_m[i])
+                color = colPalette_m[i]
+                hatch = hatch_patterns.get(color, None)
+                ax.barh(r-small_shift, width=val, height=bar_height, left=val_tot, color=color, hatch=hatch)
                 val_tot += val
             val_tot = 0
             for i, val in enumerate(sens_dict[reg][output_btt[1]]):
-                ax.barh(r+small_shift , width=val, height=bar_height, left=val_tot, color=colPalette_m[i])
+                color = colPalette_m[i]
+                hatch = hatch_patterns.get(color, None)
+                ax.barh(r+small_shift, width=val, height=bar_height, left=val_tot, color=color, hatch=hatch)
                 val_tot += val
             axes[0,r].set_title(models[r])
-            
+
         if ax == axes[idx][0]:
             ax.set_ylabel(f'{per}')
 
 for ax in axes[1]:
     ax.set_xlabel(salib)
 
-axes[0,0].annotate('EAD', xy=(0.3, 3.05))
-axes[0,0].annotate('RP 100', xy=(0.3, 2.75))
+axes[0,0].annotate('EAD', xy=(0.3, 3.05), fontsize=7)
+axes[0,0].annotate('RP 100', xy=(0.3, 2.75), fontsize=7)
 
 # Adding subfigure labels
-labels = ['a)', 'b)', 'c)', 'd)', 'e)', 'f)', '', 'g)']
+labels = ['A', 'B', 'C', 'D', 'E', 'F', '', 'G']
 for i, ax in enumerate(axes.ravel()):
-    ax.text(-0.1, 1.02, labels[i], transform=ax.transAxes, fontsize=12)
+    ax.text(-0.1, 1.05, labels[i], transform=ax.transAxes, fontsize=9, fontweight='bold')
 
 plt.setp(axes[0,0], yticks=range(len(region)), yticklabels=region_btt)
 plt.setp(axes[1,0], yticks=range(len(region)), yticklabels=region_btt)
 
 # Legend
-# Legend
 handles = [plt.Rectangle((0,0), 1, 1, color='none') for _ in colPalette_m]
-hmap = {handle: SingleColorHandler(color) for handle, color in zip(handles, colPalette_m)}
-axes[1, 0].legend(handles=handles, labels=sens_names, handler_map=hmap, ncol=4, loc='center left',
-                  bbox_to_anchor=(-0.15, -0.45), fancybox=False, shadow=False, fontsize='large')
+hmap = {handle: SingleColorHandler(color, hatch=hatch_patterns.get(color, None)) for handle, color in zip(handles, colPalette_m)}
+fig.legend(handles=handles, labels=sens_names, handler_map=hmap, ncol=4, loc='lower center',
+           bbox_to_anchor=(0.5, -0.05), fancybox=False, shadow=False, fontsize=6.5)
 
 save_fig_str = f"SA_all-models_{salib}_abs.png"
 plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w',
             edgecolor='w', orientation='portrait',
             format='png', bbox_inches='tight', pad_inches=0.1)
+

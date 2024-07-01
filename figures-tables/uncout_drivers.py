@@ -99,56 +99,56 @@ for reg in region:
 
 
 #%% plot 
-metric = "EAD"
+# metric = "EAD"
 
 # Function to concatenate dataframes with a new source column
 def concat_dfs(dfs, labels):
     return pd.concat([df.assign(source=label) for df, label in zip(dfs, labels)], ignore_index=True)
 
-# Updated to 2 columns
-fig, ax = plt.subplots(ncols=2, nrows=4, figsize=(8,8), sharex=True, sharey=True)
+# # Updated to 2 columns
+# fig, ax = plt.subplots(ncols=2, nrows=4, figsize=(8,8), sharex=True, sharey=True)
 
-labels = iter('abcdefgh')  # create an iterator for subplot labels
-#custom_colors = ['lightblue', 'orange', 'green', 'purple']
-custom_colors = ['#2b83ba', '#abdda4', '#fdae61', '#d7191c']
+# labels = iter('abcdefgh')  # create an iterator for subplot labels
+# #custom_colors = ['lightblue', 'orange', 'green', 'purple']
+# custom_colors = ['#2b83ba', '#abdda4', '#fdae61', '#d7191c']
 
-for r, reg in enumerate(['AP', 'IO', 'SH', 'WP']):
-    dfs = [delta_df_dict[reg]['MIT'], delta_df_dict[reg]['CHAZ'], delta_df_dict[reg]['STORM'], delta_df_dict[reg]['IBTrACS']]
-    data_labels = ['MIT', 'CHAZ', 'STORM', 'IBTrACS']
-    combined_df = concat_dfs(dfs, data_labels)
+# for r, reg in enumerate(['AP', 'IO', 'SH', 'WP']):
+#     dfs = [delta_df_dict[reg]['MIT'], delta_df_dict[reg]['CHAZ'], delta_df_dict[reg]['STORM'], delta_df_dict[reg]['IBTrACS']]
+#     data_labels = ['MIT', 'CHAZ', 'STORM', 'IBTrACS']
+#     combined_df = concat_dfs(dfs, data_labels)
     
-    # Set all values of the source "STORM" in the year 2090 to NaN
-    combined_df.loc[(combined_df['source'] == 'STORM') & (combined_df['year'] == 2090), metric] = float('nan')
+#     # Set all values of the source "STORM" in the year 2090 to NaN
+#     combined_df.loc[(combined_df['source'] == 'STORM') & (combined_df['year'] == 2090), metric] = float('nan')
     
-    for c, year in enumerate([2050, 2090]):
-        # Filter for each year
-        year_df = combined_df[combined_df['year'] == year]
+#     for c, year in enumerate([2050, 2090]):
+#         # Filter for each year
+#         year_df = combined_df[combined_df['year'] == year]
 
-        sns.boxplot(data=year_df, x="delta", hue="source", y=metric, width=0.4, palette=custom_colors,
-                    order=["CC", "SOC", "sum", "total"], showfliers=False, ax=ax[r, c], dodge=True)
+#         sns.boxplot(data=year_df, x="delta", hue="source", y=metric, width=0.4, palette=custom_colors,
+#                     order=["CC", "SOC", "sum", "total"], showfliers=False, ax=ax[r, c], dodge=True)
         
-        ax[r, c].get_legend().remove()
-        ax[r, c].set_yscale('symlog')
-        sns.despine()
-        ax[r, c].set(xlabel="", ylabel="")
-        ax[0, c].set_title(f"{year}")
-        if c == 0:
-            ax[r, c].set(ylabel=f"\u0394 {metric} (%)")
-            ax[r, c].text(-0.25, 0.5, reg, transform=ax[r, c].transAxes, ha='center', va='center', fontsize=12)  # Add 'reg' info
-        # else:
-        #     ax[r, c].text(1.15, 0.5, reg, transform=ax[r, c].transAxes, ha='center', va='center', fontsize=12, fontweight='bold')  # Add 'reg' info
-        ax[r, c].axhline(0, ls='dotted', color='k')
+#         ax[r, c].get_legend().remove()
+#         ax[r, c].set_yscale('symlog')
+#         sns.despine()
+#         ax[r, c].set(xlabel="", ylabel="")
+#         ax[0, c].set_title(f"{year}")
+#         if c == 0:
+#             ax[r, c].set(ylabel=f"\u0394 {metric} (%)")
+#             ax[r, c].text(-0.25, 0.5, reg, transform=ax[r, c].transAxes, ha='center', va='center', fontsize=12)  # Add 'reg' info
+#         # else:
+#         #     ax[r, c].text(1.15, 0.5, reg, transform=ax[r, c].transAxes, ha='center', va='center', fontsize=12, fontweight='bold')  # Add 'reg' info
+#         ax[r, c].axhline(0, ls='dotted', color='k')
 
-        # Add subplot labels
-        label = next(labels)  # get the next label from the iterator
-        ax[r, c].text(-0.1, 1.05, label+')', transform=ax[r, c].transAxes, fontsize=12)
+#         # Add subplot labels
+#         label = next(labels)  # get the next label from the iterator
+#         ax[r, c].text(-0.1, 1.05, label+')', transform=ax[r, c].transAxes, fontsize=12)
 
-# Create custom legend outside of the plots
-fig_labels = ['MIT', 'CHAZ', 'STORM', 'IBTrACS_p']
-handles = [mpatches.Patch(color=custom_colors[i], label=fig_labels[i]) for i in range(len(fig_labels))]
-fig.legend(handles=handles, loc='center right', bbox_to_anchor=(1.15, 0.5))
+# # Create custom legend outside of the plots
+# fig_labels = ['MIT', 'CHAZ', 'STORM', 'IBTrACS_p']
+# handles = [mpatches.Patch(color=custom_colors[i], label=fig_labels[i]) for i in range(len(fig_labels))]
+# fig.legend(handles=handles, loc='center right', bbox_to_anchor=(1.15, 0.5))
 
-plt.tight_layout()
+# plt.tight_layout()
 
 # save_fig_str = f"delta_all_{metric}.png"
 # plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w', 
@@ -156,6 +156,8 @@ plt.tight_layout()
 #             format='png', bbox_inches='tight', pad_inches=0.1) 
 
 #%% store boxplot statistics
+metric = "EAD"
+
 all_stats = []
 
 for r, reg in enumerate(['AP', 'IO', 'SH', 'WP']):
@@ -197,3 +199,77 @@ stats_df.loc[(stats_df['model'] == 'STORM') & (stats_df['year'] == 2090), ['25%'
 
 # Save to Excel
 # stats_df.to_excel(res_dir.joinpath(f'boxplot_statistics_all-models_{metric}.xlsx'), index=False)
+
+#%%
+
+plt.rcParams.update({
+    'font.size': 8,            # Default font size
+    'axes.titlesize': 9,       # Font size for figure part labels (A, B, C, etc.)
+    'axes.labelsize': 8,       # Font size for axis labels
+    'xtick.labelsize': 6,      # Font size for x-tick labels
+    'ytick.labelsize': 6,      # Font size for y-tick labels
+    'legend.fontsize': 7.5,    # Font size for legend
+    'lines.linewidth': 0.75,   # Line weight
+})
+
+metric = "rp100"
+dlts = ["CC", "SOC"]
+naming_dict = {("CC", "SOC"): 'CC-SOC',
+               ("sum", "total"): 'sum-total',
+               ("CC", "SOC", "sum", "total"): 'all'}
+key = tuple(dlts)
+
+# Function to concatenate dataframes with a new source column
+def concat_dfs(dfs, labels):
+    return pd.concat([df.assign(source=label) for df, label in zip(dfs, labels)], ignore_index=True)
+
+# Updated to 4 columns and 2 rows
+fig, ax = plt.subplots(ncols=4, nrows=2, figsize=(7.25, 3.6), sharex=True, sharey='row')
+
+#labels = iter('abcdefgh')  # create an iterator for subplot labels
+labels = iter('ABCDEFGH')  # create an iterator for subplot labels
+custom_colors = ['#2b83ba', '#abdda4', '#fdae61', '#d7191c']
+
+for c, reg in enumerate(['AP', 'IO', 'SH', 'WP']):
+    dfs = [delta_df_dict[reg]['MIT'], delta_df_dict[reg]['CHAZ'], delta_df_dict[reg]['STORM'], delta_df_dict[reg]['IBTrACS']]
+    data_labels = ['MIT', 'CHAZ', 'STORM', 'IBTrACS']
+    combined_df = concat_dfs(dfs, data_labels)
+    
+    # Set all values of the source "STORM" in the year 2090 to NaN
+    combined_df.loc[(combined_df['source'] == 'STORM') & (combined_df['year'] == 2090), metric] = float('nan')
+    
+    for r, year in enumerate([2050, 2090]):
+        year_df = combined_df[combined_df['year'] == year]
+
+        # Filter for all deltas
+        all_deltas_df = year_df[year_df['delta'].isin(['CC', 'SOC', 'sum', 'total'])]
+        
+        # Plot all deltas
+        sns.boxplot(data=all_deltas_df, x="delta", hue="source", y=metric, width=0.4, palette=custom_colors,
+                    order=dlts, showfliers=False, ax=ax[r, c], dodge=True)
+        
+        ax[r, c].get_legend().remove()
+        sns.despine(ax=ax[r, c])
+        ax[r, c].set(xlabel="", ylabel="")
+        if c == 0:
+            ax[r, c].set(ylabel=f"\u0394 {metric} (%)")
+            ax[r, c].text(-0.5, 0.5, f"{year}", transform=ax[r, c].transAxes, ha='center', va='center')
+        if r == 0:
+            ax[r, c].set_title(f"{reg}")
+        ax[r, c].axhline(0, ls='dotted', color='k')
+
+        # Add subplot labels
+        label = next(labels)
+        ax[r, c].text(-0.15, 1.05, label, transform=ax[r, c].transAxes, fontsize=9, fontweight='bold')
+
+# Create custom legend outside of the plots
+fig_labels = ['MIT', 'CHAZ', 'STORM', 'IBTrACS']
+handles = [mpatches.Patch(color=custom_colors[i], label=fig_labels[i]) for i in range(len(fig_labels))]
+fig.legend(handles=handles, loc='center right', bbox_to_anchor=(1.02, 0.5), fontsize=6.5)
+
+save_fig_str = f"delta_{naming_dict[key]}_{metric}.png"
+plt.savefig(res_dir.joinpath(save_fig_str), dpi=300, facecolor='w', 
+            edgecolor='w', orientation='portrait', 
+            format='png', bbox_inches='tight', pad_inches=0.1)
+
+
